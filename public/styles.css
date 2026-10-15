@@ -1,0 +1,45 @@
+body {
+    background-color: rgb(62, 62, 65);
+    color: rgb(161, 161, 34);
+    margin: 0;
+    padding: 24px;
+}
+main { max-width: 900px; margin: 0 auto; }
+h1 {
+    text-align: center;
+    color: rgb(161, 161, 34);
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: #ffcc00 1px 0 10px;
+    font-size: xx-large;
+}
+p {
+    text-align: center;
+    color: rgb(161, 161, 34);
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: #ffcc00 1px 0 10px;
+    font-size: larger;
+}
+hr { border: 0; border-top: 1px solid rgb(161, 161, 34); }
+.generator { text-align: center; margin: 28px auto; }
+.generator label { font-family: 'Times New Roman', Times, serif; font-size: large; }
+select, button {
+    background: rgb(45, 45, 47);
+    border: 1px solid rgb(161, 161, 34);
+    border-radius: 4px;
+    color: rgb(220, 220, 120);
+    padding: 10px 14px;
+    margin: 6px;
+    font: inherit;
+}
+button { cursor: pointer; }
+button:hover { background: rgb(78, 78, 48); }
+button:disabled { opacity: .65; cursor: wait; }
+#status { margin-bottom: 8px; }
+#result { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+#result a { color: #ffdf48; overflow-wrap: anywhere; }
+ul { color: rgb(161, 161, 34); font-family: 'Times New Roman', Times, serif; font-size: large; }
+
+[hidden] { display: none !important; }
+.generator h2 { font-family: 'Times New Roman', Times, serif; color: rgb(161, 161, 34); text-shadow: #ffcc00 1px 0 10px; }
+input { background: rgb(45, 45, 47); border: 1px solid rgb(161, 161, 34); border-radius: 4px; color: rgb(220, 220, 120); padding: 10px 14px; margin: 6px; font: inherit; max-width: min(320px, 80vw); }
+input:focus, select:focus, button:focus-visible { outline: 2px solid #ffdf48; outline-offset: 2px; }

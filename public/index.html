@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>linkgentest</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <h1>Celui qui a été le plus « biker » le restera à jamais.</h1>
+        <p>Generate a link for a randomized site below.</p>
+        <section id="generator-panel" class="generator" aria-label="Website generator">
+            <label for="template">Website:</label>
+            <select id="template" aria-label="Choose a website template">
+                <option value="truffled">Truffled</option>
+            </select>
+            <button id="generate" type="button">Generate Link</button>
+            <p id="status" role="status" aria-live="polite"></p>
+            <div id="result"></div>
+        </section>
+        <br><br><br>
+        <hr>
+        <p>Current supported websites:</p>
+        <ul id="template-list"><li>Truffled</li></ul>
+    </main>
+    <script>
+      const select = document.getElementById('template');
+      const button = document.getElementById('generate');
+      const status = document.getElementById('status');
+      const result = document.getElementById('result');
+
+      async function loadTemplates() {
+        try {
+          const response = await fetch('/api/templates');
+          if (!response.ok) throw new Error();
+          const data = await response.json();
+          select.replaceChildren();
+          const list = document.getElementById('template-list');
+          list.replaceChildren();
+          for (const name of data.templates) {
+            const label = name.charAt(0).toUpperCase() + name.slice(1);
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = label;
+            select.appendChild(option);
+            const item = document.createElement('li');
+            item.textContent = label;
+            list.appendChild(item);
+          }
+          if (!data.templates.length) status.textContent = 'No templates found. Add HTML files to the templates folder.';
+        } catch { status.textContent = 'Could not load available website templates.'; }
+      }
+
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        status.textContent = 'Generating link...';
+        result.replaceChildren();
+        try {
+          const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ template: select.value })
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Could not generate link');
+          const url = new URL(data.url, window.location.origin).href;
+          status.textContent = 'Website created:';
+          const link = document.createElement('a');
+          link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = url;
+          result.appendChild(link);
+          const copy = document.createElement('button');
+          copy.type = 'button'; copy.textContent = 'Copy Link';
+          copy.addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText(url); copy.textContent = 'Copied!'; }
+            catch { status.textContent = 'Copy failed. Select and copy the link above.'; }
+          });
+          result.appendChild(copy);
+        } catch (error) { status.textContent = 'Error: ' + error.message; }
+        finally { button.disabled = false; }
+      });
+
+      loadTemplates();
+    </script>
+</body>
+</html>
